@@ -41,7 +41,7 @@ tokenizer = 'glove'#glove
 data_root = '/home/thenhz/workspace/hate-speech/data/'
 embeddingfile = data_root + 'word2vec/glove_WIKI'
 inputFile = files= data_root + 'hate-speech/haspeede_TW-train.tsv'
-dimension = '25'
+dimension = '300'
 optimizer= 'adam'
 initialize_weights = 'random'#glove
 epochs = 10
