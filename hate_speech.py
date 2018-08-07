@@ -19,53 +19,32 @@ labels = []  # list of label ids
 # vocab generation
 #freq = defaultdict(int)
 tweets = {}
+data_root = '/home/thenhz/workspace/hate-speech/data/'
 
-EMBEDDING_DIM = None
-GLOVE_MODEL_FILE = None
-SEED = 42
+EMBEDDING_DIM = 25
+GLOVE_MODEL_FILE = data_root + 'word2vec/glove_WIKI'
+SEED = 324
 NO_OF_FOLDS = 10
 CLASS_WEIGHT = None
 LOSS_FUN = "binary_crossentropy"
-OPTIMIZER = None
+OPTIMIZER = "adagrad"
 KERNEL = None
 TOKENIZER = None
 MAX_SEQUENCE_LENGTH = None
-INITIALIZE_WEIGHTS_WITH = None
-LEARN_EMBEDDINGS = None
-EPOCHS = 10
-BATCH_SIZE = 512
+INITIALIZE_WEIGHTS_WITH = 'glove'#glove
+LEARN_EMBEDDINGS = False
+EPOCHS = 1
+BATCH_SIZE = 32
 SCALE_LOSS_FUN = None
 
 word2vec_model = None
 tokenizer = 'glove'#glove
-data_root = '/home/thenhz/workspace/hate-speech/data/'
-embeddingfile = data_root + 'word2vec/glove_WIKI'
 inputFile = files= data_root + 'hate-speech/haspeede_TW-train.tsv'
-dimension = '300'
-optimizer= 'adam'
-initialize_weights = 'random'#glove
-epochs = 10
-batch_size = 255
 
-seed = 231
-folds = None
-class_weight = None
-loss = None
-kernel = None
+
 #python lstm.py -f ~/DATASETS/glove-twitter/GENSIM.glove.twitter.27B.25d.txt
 #-d 25 --tokenizer glove --loss categorical_crossentropy --optimizer adam --initialize-weights random
 #--learn-embeddings --epochs 10 --batch-size 512
-GLOVE_MODEL_FILE = embeddingfile
-EMBEDDING_DIM = int(dimension)
-
-OPTIMIZER = optimizer
-
-
-
-EPOCHS = int(epochs)
-BATCH_SIZE = int(batch_size)
-
-
 
 np.random.seed(SEED)
 print('GLOVE embedding: %s' %(GLOVE_MODEL_FILE))
@@ -80,9 +59,6 @@ if tokenizer == "glove":
     TOKENIZER = glove_tokenize
 elif tokenizer == "nltk":
     TOKENIZER = tokenize_nltk.casual.TweetTokenizer(strip_handles=True, reduce_len=True).tokenize
-INITIALIZE_WEIGHTS_WITH = initialize_weights
-
-
 
 
 tweets = select_tweets(files=[inputFile],TOKENIZER=TOKENIZER,word2vec_model=word2vec_model)

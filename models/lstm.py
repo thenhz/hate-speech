@@ -71,27 +71,24 @@ def train_LSTM(X, y, model, inp_dim, weights, epochs, batch_size,INITIALIZE_WEIG
                     class_weights[0] = np.where(y_temp == 0)[0].shape[0] / float(len(y_temp))
                     class_weights[1] = np.where(y_temp == 1)[0].shape[0] / float(len(y_temp))
 
-                try:
-                    y_temp = np_utils.to_categorical(y_temp, nb_classes=2)
-                except Exception as e:
-                    print
-                    e
-                    print
-                    y_temp
-                print
-                x.shape, y.shape
+                # try:
+                #     y_temp = np_utils.to_categorical(y_temp, nb_classes=2)
+                # except Exception as e:
+                #     print
+                #     e
+                #     print
+                #     y_temp
+                # print
+                # x.shape, y.shape
                 loss, acc = model.train_on_batch(x, y_temp, class_weight=class_weights)
-                print
-                loss, acc
+                print(loss, acc)
+
 
         y_pred = model.predict_on_batch(X_test)
         y_pred = np.argmax(y_pred, axis=1)
-        print
-        classification_report(y_test, y_pred)
-        print
-        precision_recall_fscore_support(y_test, y_pred)
-        print
-        y_pred
+        print(classification_report(y_test, y_pred))
+        print(precision_recall_fscore_support(y_test, y_pred))
+        print(y_pred)
         p += precision_score(y_test, y_pred, average='weighted')
         p1 += precision_score(y_test, y_pred, average='micro')
         r += recall_score(y_test, y_pred, average='weighted')
