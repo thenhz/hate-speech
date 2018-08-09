@@ -71,6 +71,8 @@ print("max seq length is %d"%(MAX_SEQUENCE_LENGTH))
 
 data = pad_sequences(X, maxlen=MAX_SEQUENCE_LENGTH)
 y = np.array(y)
+a = np.int8(np.logical_not(y))
+y = np.vstack((y,a)).T
 data, y = sklearn.utils.shuffle(data, y)
 W = get_embedding_weights(EMBEDDING_DIM,word2vec_model,vocab)
 

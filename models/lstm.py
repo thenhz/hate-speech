@@ -33,7 +33,7 @@ def lstm_model(sequence_length, vocab, embedding_dim,learn_embeddings,LOSS_FUN,O
     model.add(Dropout(0.25))  # , input_shape=(sequence_length, embedding_dim)))
     model.add(LSTM(50))
     model.add(Dropout(0.5))
-    model.add(Dense(1))
+    model.add(Dense(2))
     model.add(Activation('softmax'))
     model.compile(loss=LOSS_FUN, optimizer=OPTIMIZER, metrics=['accuracy'])
     print(model.summary())
@@ -53,17 +53,16 @@ def train_LSTM(X, y, model, inp_dim, weights, epochs, batch_size,INITIALIZE_WEIG
         elif INITIALIZE_WEIGHTS_WITH == "random":
             shuffle_weights(model)
         else:
-            print
-            "ERROR!"
+            print("ERROR!")
             return
         X_train, y_train = X[train_index], y[train_index]
         X_test, y_test = X[test_index], y[test_index]
-        y_train = y_train.reshape((len(y_train), 1))
-        X_temp = np.hstack((X_train, y_train))
+        #y_train = y_train.reshape((len(y_train), 1))
+        X_temp = np.hstack((X_train, y_train,))
         for epoch in range(epochs):
             for X_batch in batch_gen(X_temp, batch_size):
                 x = X_batch[:, :sentence_len]
-                y_temp = X_batch[:, sentence_len]
+                y_temp = X_batch[:, sentence_len:]
 
                 class_weights = None
                 if SCALE_LOSS_FUN:
@@ -80,12 +79,15 @@ def train_LSTM(X, y, model, inp_dim, weights, epochs, batch_size,INITIALIZE_WEIG
                 #     y_temp
                 # print
                 # x.shape, y.shape
-                loss, acc = model.train_on_batch(x, y_temp, class_weight=class_weights)
+                loss, acc = model.train_on_batch(x, y_temp)
                 print(loss, acc)
 
 
         y_pred = model.predict_on_batch(X_test)
-        y_pred = np.argmax(y_pred, axis=1)
+        y_pred = np.round(y_pred,decimals = 0)
+        #a = np.int8(np.logical_not(y_test))
+        #y_test = np.vstack((y_test, a)).T
+
         print(classification_report(y_test, y_pred))
         print(precision_recall_fscore_support(y_test, y_pred))
         print(y_pred)
